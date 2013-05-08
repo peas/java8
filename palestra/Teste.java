@@ -29,6 +29,7 @@ public class Teste {
 
 
 	public static void main(String ... args) {
+
 		Usuario p1 = new Usuario("Paulo Silveira", 150);
 		Usuario p2 = new Usuario("Rodrigo Turini", 120);
 		Usuario p3 = new Usuario("Alexandre Freire", 35);
@@ -42,16 +43,26 @@ public class Teste {
 			}
 		});
 
-		usuarios.forEach((p) -> { System.out.println(p.getNome());});
+		usuarios.forEach((Usuario u) -> { System.out.println(u.getNome());});
 
-		usuarios.forEach(p -> { System.out.println(p.getNome());});
+		usuarios.forEach((u) -> { System.out.println(u.getNome());});
 
-		usuarios.forEach(p -> System.out.println(p.getNome()));
+		usuarios.forEach(u -> { System.out.println(u.getNome());});
 
-		// somar numero de posts
+		usuarios.forEach(u -> System.out.println(u.getNome()));
 
 
+		// somar numero de posts dos usuarios
 
+		// com lambda, posso usar o mapToInt e chamar o sum
+
+		usuarios.stream().mapToInt(u -> u.getPontos()).sum();
+
+		// a mesma coisa só que com method reference
+
+		int soma = usuarios.stream().mapToInt(Usuario::getPontos).sum();
+
+		System.out.println("soma dos pontos: "+ soma);
 
 
 		// todos que tem mais de 50 posts, favoritar!
@@ -80,10 +91,30 @@ public class Teste {
 
 		usuarios.stream().filter(p -> p.getPontos() > 50).forEach(System.out::println);
 
-		// ordenar por post
 
-		// 4 coisas:	
 
+		// ordenar os Usuarios por post (numero de pontos)
+
+		// usando o sort (da propria lista de usuarios) com lambda
+
+		usuarios.sort((Usuario u1, Usuario u2) -> (u1.getPontos() - u2.getPontos()));
+
+		// usando o sort com lambda sem informação do tipo Usuario
+
+		usuarios.sort( (u1, u2) -> (u1.getPontos() - u2.getPontos()));
+
+		// usando o sorted do Stream.. a diferença é que esse cara é lazy, ou 
+		// seja retorna um Stream<Usuario> que contem a lista ordenada
+
+		usuarios.stream().sorted( (u1, u2) -> (u1.getPontos() - u2.getPontos()));
+
+		// É meio obvio, mas acho valido falar que podemos escrever 
+		// o compareTo no usuario e usar method reference, algo como:
+		// usuarios.sort(Usuario::compareTo) ... fica bem mais simples
+
+		// só um sout pra mostrar que deu certo
+		usuarios.forEach(u -> System.out.println("Usuario "+ u.getNome() 
+			+ " tem " +u.getPontos() + " Pontos" ));
 	}
 
 
