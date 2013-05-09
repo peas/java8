@@ -129,6 +129,7 @@ public class Teste {
 		// só um sout pra mostrar que deu certo
 		usuarios.forEach(u -> System.out.println("Usuario "+ u.getNome() 
 			+ " tem " +u.getPontos() + " Pontos" ));
+
 	}
 
 
