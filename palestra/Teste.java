@@ -37,18 +37,24 @@ public class Teste {
 
 		List<Usuario> usuarios = Arrays.asList(p1, p2, p3);
 
+		// paulo 1 (falar de defender methods)
 		usuarios.forEach(new Consumer<Usuario>() {
 			public void accept(Usuario p) {
 				System.out.println(p.getNome());
 			}
 		});
 
+		// paulo 2
 		usuarios.forEach((Usuario u) -> { System.out.println(u.getNome());});
+		
+		// paulo 3
+		Consumer<Usuario> consumidor = (Usuario u) -> { System.out.println(u.getNome());};
 
 		usuarios.forEach((u) -> { System.out.println(u.getNome());});
 
 		usuarios.forEach(u -> { System.out.println(u.getNome());});
 
+		// paulo 4
 		usuarios.forEach(u -> System.out.println(u.getNome()));
 
 
@@ -56,17 +62,20 @@ public class Teste {
 
 		// com lambda, posso usar o mapToInt e chamar o sum
 
+		// rodrigo 1 (Falar do streamificacao da api)
 		usuarios.stream().mapToInt(u -> u.getPontos()).sum();
 
-		// a mesma coisa só que com method reference
+		Stream<String> nomes = usuarios.stream().map(Usuario::getNome);
 
+		// a mesma coisa só que com method reference
+		// rodrigo 2, falar do method reference
 		int soma = usuarios.stream().mapToInt(Usuario::getPontos).sum();
 
 		System.out.println("soma dos pontos: "+ soma);
 
 
 		// todos que tem mais de 50 posts, favoritar!
-
+		// rodrigo 3, falando que stream tem muitos outros metodos!
 		Stream<Usuario> stream = usuarios.stream().filter(
 			new Predicate<Usuario>() {
 				public boolean test(Usuario p) {
@@ -74,6 +83,8 @@ public class Teste {
 				}
 			}
 		);
+
+		// rodrigo4: problema, eu nao queria Stream! eu queria List!
 
 		List<Usuario> filtrados = usuarios.stream().filter(
 			new Predicate<Usuario>() {
@@ -83,10 +94,13 @@ public class Teste {
 			}
 		).collect(Collectors.toList());
 
+		// rodrigo 5: explicar que .stream e .collect sao complementares, a ida e a volta!
+		// rodrigo 6: com lambda:
 		List<Usuario> filtrados2 = usuarios.stream().filter(p -> p.getPontos() > 50).collect(Collectors.toList());
 
 		usuarios.stream().filter(p -> p.getPontos() > 50).forEach(p -> p.favoritar());
 
+		// rodrigo 7: abusando do method reference
 		usuarios.stream().filter(p -> p.getPontos() > 50).forEach(Usuario::favoritar);
 
 		usuarios.stream().filter(p -> p.getPontos() > 50).forEach(System.out::println);
