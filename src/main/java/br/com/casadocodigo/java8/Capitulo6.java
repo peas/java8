@@ -26,11 +26,7 @@ class Capitulo6 {
 		Consumer<Usuario> tornaModerador = Usuario::tornaModerador;
 		usuarios.forEach(tornaModerador);
 
-		//TODO: mesmo do Cap.5, <Usuario, String>
-		
-		usuarios.sort(Comparator.<Usuario, String>comparing(u -> u.getNome()));
-		
-		// TODO: com method reference o Target Type funcionou, sem o <Usuario, String>
+		usuarios.sort(Comparator.comparing(u -> u.getNome()));
 		
 		usuarios.sort(Comparator.comparing(Usuario::getNome));
 		
