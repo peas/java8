@@ -42,5 +42,10 @@ class Capitulo6 {
 		BiFunction<String, Integer, Usuario> criadorDeUsuarios2 = Usuario::new;
 		Usuario rodrigo2 = criadorDeUsuarios2.apply("Rodrigo Turini", 50);
 		Usuario paulo2 = criadorDeUsuarios2.apply("Paulo Silveira", 300);
+
+		
+		Runnable consumer = rodrigo::tornaModerador;
+
+
 	}
 }
