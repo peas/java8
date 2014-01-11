@@ -36,9 +36,8 @@ class Capitulo5 {
 		
 		usuarios.sort((u1, u2) -> u1.getNome().compareTo(u2.getNome()));
 		
-		Comparator<Usuario> comparator22 =
-				Comparator.comparing(Usuario::getNome)
-					.thenComparing(Usuario::getNome);
+
+		usuarios.sort(Comparator.comparing(u -> u.getNome()));	
 
 		usuarios.sort(Comparator.comparing(u -> u.getPontos()));
 
@@ -57,5 +56,16 @@ class Capitulo5 {
 
 		usuarios.sort(Comparator.comparingInt(u -> u.getPontos()));
 
+		// ordem natural:
+		List<String> palavras = 
+    		Arrays.asList("Casa do Código", "Alura", "Caelum");
+
+    	palavras.sort(Comparator.naturalOrder());
+    	palavras.sort(Comparator.<Comparable>naturalOrder().reversed());
+
+		Comparator<String> natural = Comparator.naturalOrder();
+		palavras.sort(natural.reversed());
+
+    	usuarios.sort(Comparator.comparing((Usuario u) -> u.getNome()).reversed());	
 	}
 }
