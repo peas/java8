@@ -32,7 +32,23 @@ class Capitulo6 {
 		
 		Function<Usuario, String> byName = Usuario::getNome;
 		usuarios.sort(comparing(byName));
-		
+
+		// compondo comparators
+
+		usuarios.sort(Comparator.comparingInt(Usuario::getPontos));
+
+
+		Comparator<Usuario> c = Comparator.comparingInt(Usuario::getPontos)
+                                 .thenComparing(Usuario::getNome);
+
+        usuarios.sort(Comparator.comparingInt(Usuario::getPontos)
+                            .thenComparing(Usuario::getNome));
+
+        usuarios.sort(Comparator.comparingInt((Usuario u) -> u.getPontos())
+                            .thenComparing(u -> u.getNome()));
+
+		// metodos estaticos:
+
 		usuarios.forEach(System.out::println);
 		
 		Function<String, Usuario> criadorDeUsuarios = Usuario::new;
