@@ -44,8 +44,13 @@ class Capitulo6 {
         usuarios.sort(Comparator.comparingInt(Usuario::getPontos)
                             .thenComparing(Usuario::getNome));
 
+        usuarios.sort(Comparator.nullsLast(
+                      	Comparator.comparing(Usuario::getNome)));
+
+        // necessidade de tipagem para inferencia correta:
         usuarios.sort(Comparator.comparingInt((Usuario u) -> u.getPontos())
                             .thenComparing(u -> u.getNome()));
+
 
 		// metodos estaticos:
 
