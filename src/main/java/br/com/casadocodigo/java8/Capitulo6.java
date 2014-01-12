@@ -51,6 +51,19 @@ class Capitulo6 {
         usuarios.sort(Comparator.comparingInt((Usuario u) -> u.getPontos())
                             .thenComparing(u -> u.getNome()));
 
+ 		Comparator<Usuario> comparator = Comparator.comparing(u -> u.getPontos());
+        usuarios.sort(comparator.thenComparing(u -> u.getNome()));
+
+        Comparator<Usuario> comparator2 = Comparator.comparing(u -> u.getNome());
+        usuarios.sort(comparator2.reversed());
+
+        usuarios.sort(Comparator.comparing(Usuario::getPontos).reversed());
+
+
+        usuarios.sort(Comparator.<Usuario, String>comparing(u -> u.getPontos()).reversed());	
+        
+        // esse o compilador nao infere e da erro: 
+		// usuarios.sort(Comparator.comparing(u -> u.getPontos()).reversed());
 
 		// metodos estaticos:
 

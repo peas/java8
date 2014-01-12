@@ -61,11 +61,7 @@ class Capitulo5 {
     		Arrays.asList("Casa do Código", "Alura", "Caelum");
 
     	palavras.sort(Comparator.naturalOrder());
-    	palavras.sort(Comparator.<Comparable>naturalOrder().reversed());
+    	palavras.sort(Comparator.reverseOrder());
 
-		Comparator<String> natural = Comparator.naturalOrder();
-		palavras.sort(natural.reversed());
-
-    	usuarios.sort(Comparator.comparing((Usuario u) -> u.getNome()).reversed());	
 	}
 }
