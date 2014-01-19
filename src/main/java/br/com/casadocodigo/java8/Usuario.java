@@ -17,6 +17,7 @@ class Usuario {
 	}
 
 	public int getPontos() {
+		System.out.println("x");
 		return pontos;
 	}
 
@@ -30,5 +31,10 @@ class Usuario {
 	
 	public String toString() {
 		return "Usuario " + nome;
+	}
+
+	public boolean isModerador() {
+
+		return moderador;
 	}
 }

@@ -60,7 +60,7 @@ class Capitulo6 {
         usuarios.sort(Comparator.comparing(Usuario::getPontos).reversed());
 
 
-        usuarios.sort(Comparator.<Usuario, String>comparing(u -> u.getPontos()).reversed());	
+        usuarios.sort(Comparator.<Usuario, Integer>comparing(u -> u.getPontos()).reversed());	
         
         // esse o compilador nao infere e da erro: 
 		// usuarios.sort(Comparator.comparing(u -> u.getPontos()).reversed());
