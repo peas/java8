@@ -13,15 +13,19 @@ class Capitulo8 {
 
 		List<Usuario> usuarios = Arrays.asList(u1, u2, u3);
 
-		Comparator<Usuario> bomba = new Comparator<Usuario>() {
-			@Override
-			public int compare(Usuario u1, Usuario u2) {
-				throw new IllegalStateException();
-			}
-		};
-
 		usuarios.stream().filter(u -> u.getPontos() > 100)
 				.peek(System.out::println).findAny();
+
+		System.out.println();
+
+		usuarios.stream().sorted(Comparator.comparing(Usuario::getNome))
+				.peek(System.out::println).findAny();
+
+		System.out.println();
+
+		usuarios.stream().filter(u -> u.getPontos() > 100)
+				.peek(System.out::println).forEach(System.out::println);
+
 
 	}
 }
