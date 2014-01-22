@@ -13,19 +13,31 @@ class Capitulo8 {
 
 		List<Usuario> usuarios = Arrays.asList(u1, u2, u3);
 
+		// peek mostra so os processados:
 		usuarios.stream().filter(u -> u.getPontos() > 100)
 				.peek(System.out::println).findAny();
 
 		System.out.println();
 
+		// peek é apens intermeridiario:
+
+		usuarios.stream().filter(u -> u.getPontos() > 100)
+				.peek(System.out::println);  // precisa chamar terminal!
+
+		System.out.println();
+
+		// sort é operador intermediario, porem stateful:
 		usuarios.stream().sorted(Comparator.comparing(Usuario::getNome))
 				.peek(System.out::println).findAny();
 
 		System.out.println();
 
-		usuarios.stream().filter(u -> u.getPontos() > 100)
-				.peek(System.out::println).forEach(System.out::println);
+		
 
+		usuarios.stream()
+			.sorted(Comparator.comparing(Usuario::getNome))
+			.peek(System.out::println)
+			.findAny();
 
 	}
 }
