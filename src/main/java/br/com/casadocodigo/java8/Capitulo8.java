@@ -7,11 +7,11 @@ import java.util.function.*;
 class Capitulo8 {
 	public static void main (String... args) {
 
-		Usuario u1 = new Usuario("Paulo Silveira", 150);
-		Usuario u2 = new Usuario("Rodrigo Turini", 120);
-		Usuario u3 = new Usuario("Guilherme Silveira", 90);
+		Usuario user1 = new Usuario("Paulo Silveira", 150);
+		Usuario user2 = new Usuario("Rodrigo Turini", 120);
+		Usuario user3 = new Usuario("Guilherme Silveira", 90);
 
-		List<Usuario> usuarios = Arrays.asList(u1, u2, u3);
+		List<Usuario> usuarios = Arrays.asList(user1, user2, user3);
 
 		// peek mostra so os processados:
 		usuarios.stream().filter(u -> u.getPontos() > 100)
@@ -38,6 +38,28 @@ class Capitulo8 {
 			.sorted(Comparator.comparing(Usuario::getNome))
 			.peek(System.out::println)
 			.findAny();
+
+		Usuario maximaPontuacao = usuarios.stream()
+			.max(Comparator.comparing(Usuario::getPontos))
+			.get();
+		int total = usuarios.stream()
+			.mapToInt(Usuario::getPontos)
+			.sum();
+
+		int valorInicial = 0;
+		IntBinaryOperator operacao = (a, b) -> a + b;
+
+		int total2 = usuarios.stream()
+			.mapToInt(Usuario::getPontos)
+			.reduce(valorInicial, operacao);
+
+		int multiplicacao = usuarios.stream()
+			.mapToInt(Usuario::getPontos)
+			.reduce(1, (a,b) -> a * b);
+
+		// pulando o map!
+		int total3 = usuarios.stream()
+			.reduce(0, (atual, u) -> atual + u.getPontos(), Integer::sum);	
 
 	}
 }
