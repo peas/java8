@@ -65,6 +65,8 @@ class Capitulo8 {
 		s.iterator().next().getPontos();
 		s.iterator().next().getPontos();
 
+		boolean hasModerator = usuarios.stream().anyMatch(Usuario::isModerador);
+
 	}
 }
 
