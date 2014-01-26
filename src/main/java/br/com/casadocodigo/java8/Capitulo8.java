@@ -61,6 +61,10 @@ class Capitulo8 {
 		int total3 = usuarios.stream()
 			.reduce(0, (atual, u) -> atual + u.getPontos(), Integer::sum);	
 
+		Stream<Usuario> s = usuarios.stream();
+		s.iterator().next().getPontos();
+		s.iterator().next().getPontos();
+
 	}
 }
 
