@@ -67,6 +67,12 @@ class Capitulo8 {
 
 		boolean hasModerator = usuarios.stream().anyMatch(Usuario::isModerador);
 
+		// stream infinito:
+
+
+
+		// cuidado: vai ficar trabalhando infinitamente:
+
 	}
 }
 
