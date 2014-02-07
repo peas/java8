@@ -63,15 +63,47 @@ class Capitulo8 {
 
 		Stream<Usuario> s = usuarios.stream();
 		s.iterator().next().getPontos();
-		s.iterator().next().getPontos();
+
 
 		boolean hasModerator = usuarios.stream().anyMatch(Usuario::isModerador);
 
 		// stream infinito:
 
+		Random random = new Random(0);
+		IntStream stream = IntStream.generate(() -> random.nextInt());
+
+		// loop infinito
+		//int valor = stream.sum();
+
+		List<Integer> list = IntStream
+			.generate(() -> random.nextInt())
+			.limit(100)
+			.boxed()
+			.collect(Collectors.toList());
+
+		class Fibonacci implements IntSupplier {
+			private int anterior = 0;
+			private int proximo = 1;
+
+			public int getAsInt() {
+
+				return proximo;
+			}
+		}
+
+		List<Integer> listFibonacci = IntStream
+			.generate(new Fibonacci())
+			.limit(100)
+			.boxed()
+			.collect(Collectors.toList());
+
+		int maiorQue100 = IntStream
+			.generate(new Fibonacci())
+			.filter(f -> f > 100)
+			.findFirst().getAsInt();
 
 
-		// cuidado: vai ficar trabalhando infinitamente:
+
 
 	}
 }

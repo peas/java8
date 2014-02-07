@@ -6,11 +6,11 @@ import java.util.function.*;
 
 class Capitulo9 {
 	public static void main (String... args) {
-
+		int x = 4;
 		Runnable oldStyle = new Runnable() {
 			public void run() {
 				for(int i = 0; i < 10000; i++)
-					System.out.println("programa 1 valor " + i);
+					System.out.println("programa 1 valor " + x);
 			}
 		};
 
