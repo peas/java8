@@ -86,21 +86,27 @@ class Capitulo8 {
 			private int proximo = 1;
 
 			public int getAsInt() {
-
-				return proximo;
+				proximo = proximo + anterior;
+				anterior = proximo - anterior;
+				return anterior;
 			}
 		}
 
-		List<Integer> listFibonacci = IntStream
-			.generate(new Fibonacci())
-			.limit(100)
-			.boxed()
-			.collect(Collectors.toList());
+		IntStream.generate(new Fibonacci())
+			.limit(10)
+			.forEach(System.out::println);
 
 		int maiorQue100 = IntStream
 			.generate(new Fibonacci())
 			.filter(f -> f > 100)
-			.findFirst().getAsInt();
+			.findFirst()
+			.getAsInt();
+
+		System.out.println(maiorQue100);
+
+		IntStream.iterate(0, x -> x + 1)
+			.limit(10)
+			.forEach(System.out::println);		
 
 
 
