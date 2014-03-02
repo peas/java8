@@ -29,7 +29,7 @@ class Capitulo9 {
 		
 		for(Usuario u: usuarios) {
 			pontuacaoJ8
-				.computeIfAbsent(u.getPontos(), ArrayList::new)
+				.computeIfAbsent(u.getPontos(), user -> new ArrayList<>())
 				.add(u);
 		}
 
@@ -50,10 +50,14 @@ class Capitulo9 {
 
 		Map<Boolean, Integer> pontuacaoPorTipo = usuarios
 		 	.stream()
-            .collect(Collectors.groupingBy(Usuario::isModerador,
+            .collect(Collectors.partitioningBy(u -> u.isModerador(),
             	Collectors.summingInt(Usuario::getPontos)));
 
 		System.out.println(pontuacaoPorTipo);
+
+		List<Integer> pontos = usuarios.stream()
+			.filter(u -> u.getPontos() > 100)
+			.reduce(new ArrayList<>(), (l1, l2) -> {l1.addAll(l2); return l1;});
 		
 	}
 }
