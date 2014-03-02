@@ -58,16 +58,16 @@ class Capitulo9 {
 		Map<Boolean, List<String>> nomesPorTipo = usuarios
 		 	.stream()
             .collect(Collectors.partitioningBy(u -> u.isModerador(),
-            	Collectors.mapping(Usuario::getNome)));
+            	Collectors.mapping(Usuario::getNome, Collectors.toList())));
 
 		System.out.println(nomesPorTipo);
 
 		
-
-		List<Uusario> usuarioss = usuarios.stream()
+/*
+		ArrayList<Usuario> usuarioss = usuarios.stream()
 			.filter(u -> u.getPontos() > 100)
 			.reduce(new ArrayList<Usuario>(), (l1, l2) -> {l1.addAll(l2); return l1;});
-		
+*/		
 	}
 }
 

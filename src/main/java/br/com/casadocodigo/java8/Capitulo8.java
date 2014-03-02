@@ -1,11 +1,12 @@
 package br.com.casadocodigo.java8;
 
 import java.util.*;
+import java.nio.file.*;
 import java.util.stream.*;
 import java.util.function.*;
 
 class Capitulo8 {
-	public static void main (String... args) {
+	public static void main (String... args) throws Exception {
 
 		Usuario user1 = new Usuario("Paulo Silveira", 150);
 		Usuario user2 = new Usuario("Rodrigo Turini", 120);
@@ -66,6 +67,22 @@ class Capitulo8 {
 
 
 		boolean hasModerator = usuarios.stream().anyMatch(Usuario::isModerador);
+
+
+		// flatmap e java.nio.files
+
+		Files.list(Paths.get("."))
+			.forEach(System.out::println);
+
+		Files.list(Paths.get("."))
+			.filter(Files::isDirectory)
+			.forEach(System.out::println);
+
+		Files.list(Paths.get("."))
+			.flatMap(p -> Files.isDirectory(p) ? 
+						Files.list(p) :
+						Stream.of(p))
+			.forEach(System.out::println);
 
 		// stream infinito:
 
