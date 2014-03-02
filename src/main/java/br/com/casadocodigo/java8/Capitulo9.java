@@ -18,15 +18,6 @@ class Capitulo9 {
 						p -> lines(p).count()));
 		System.out.println(lines);
 
-		Map<Path, Long> classes = 
-			Files.list(Paths.get("./br/com/casadocodigo/java8"))
-				.filter(p -> p.toString().endsWith(".java"))
-				.collect(Collectors.toMap(
-						p -> p, 
-						p -> lines(p)
-							.filter(s -> s.contains("class"))
-							.count()));
-		System.out.println(classes);
 
 		Map<Path, List<String>> linesPerFile = 
 			Files.list(Paths.get("./br/com/casadocodigo/java8"))
