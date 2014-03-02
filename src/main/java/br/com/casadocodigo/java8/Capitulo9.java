@@ -55,9 +55,18 @@ class Capitulo9 {
 
 		System.out.println(pontuacaoPorTipo);
 
-		List<Integer> pontos = usuarios.stream()
+		Map<Boolean, List<String>> nomesPorTipo = usuarios
+		 	.stream()
+            .collect(Collectors.partitioningBy(u -> u.isModerador(),
+            	Collectors.mapping(Usuario::getNome)));
+
+		System.out.println(nomesPorTipo);
+
+		
+
+		List<Uusario> usuarioss = usuarios.stream()
 			.filter(u -> u.getPontos() > 100)
-			.reduce(new ArrayList<>(), (l1, l2) -> {l1.addAll(l2); return l1;});
+			.reduce(new ArrayList<Usuario>(), (l1, l2) -> {l1.addAll(l2); return l1;});
 		
 	}
 }
