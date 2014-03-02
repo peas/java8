@@ -46,6 +46,16 @@ class Capitulo9 {
 
 		List<Usuario> usuarios = Arrays.asList(user1, user2, user3, user4, user5);
 
+			ArrayList<Usuario> usuarioss = usuarios.stream()
+			.filter(u -> u.getPontos() > 100)
+			.reduce(new ArrayList<Usuario>() {{System.out.println("x");}} , 
+					(l, u) -> { l.add(u); return l; } ,
+					(l1, l2) -> {System.out.println("YYY");l1.addAll(l2); return l1;});
+
+
+			System.out.println(usuarios);	
+			System.exit(0);
+
 		Map<Integer, List<Usuario>> pontuacaoVelha = new HashMap<>();
 		
 		for(Usuario u: usuarios) {
@@ -94,12 +104,7 @@ class Capitulo9 {
 
 		System.out.println(nomesPorTipo);
 
-		
-/*
-		ArrayList<Usuario> usuarioss = usuarios.stream()
-			.filter(u -> u.getPontos() > 100)
-			.reduce(new ArrayList<Usuario>(), (l1, l2) -> {l1.addAll(l2); return l1;});
-*/		
+
 	}
 
 	static Stream<String> lines(Path p) {

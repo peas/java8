@@ -63,10 +63,6 @@ class Capitulo8 {
 		int total3 = usuarios.stream()
 			.reduce(0, (atual, u) -> atual + u.getPontos(), Integer::sum);	
 
-		Stream<Usuario> s = usuarios.stream();
-		s.iterator().next().getPontos();
-
-
 		boolean hasModerator = usuarios.stream().anyMatch(Usuario::isModerador);
 
 
@@ -90,11 +86,17 @@ class Capitulo8 {
 				.filter(p -> p.toString().endsWith(".java"))
 				.map(p -> lines(p));
 
-
 		Files.list(Paths.get("./br/com/casadocodigo/java8"))
 			.filter(p -> p.toString().endsWith(".java"))
 			.flatMap(p -> lines(p))
 			.forEach(System.out::println);
+
+		
+		IntStream chars =
+			Files.list(Paths.get("./br/com/casadocodigo/java8"))
+				.filter(p -> p.toString().endsWith(".java"))
+				.flatMap(p -> lines(p))
+				.flatMapToInt((String s) -> s.chars());
 
 
 		// stream infinito:
