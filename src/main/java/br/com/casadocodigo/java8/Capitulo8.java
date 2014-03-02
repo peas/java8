@@ -1,6 +1,7 @@
 package br.com.casadocodigo.java8;
 
 import java.util.*;
+import java.io.*;
 import java.nio.file.*;
 import java.util.stream.*;
 import java.util.function.*;
@@ -71,18 +72,30 @@ class Capitulo8 {
 
 		// flatmap e java.nio.files
 
-		Files.list(Paths.get("."))
+		Files.list(Paths.get("./br/com/casadocodigo/java8"))
 			.forEach(System.out::println);
 
-		Files.list(Paths.get("."))
-			.filter(Files::isDirectory)
+		Files.list(Paths.get("./br/com/casadocodigo/java8"))
+			.filter(p -> p.toString().endsWith(".java"))
 			.forEach(System.out::println);
 
-		Files.list(Paths.get("."))
-			.flatMap(p -> Files.isDirectory(p) ? 
-						Files.list(p) :
-						Stream.of(p))
+
+		Files.list(Paths.get("./br/com/casadocodigo/java8"))
+			.filter(p -> p.toString().endsWith(".java"))
+			.map(p -> lines(p))
 			.forEach(System.out::println);
+
+		Stream<Stream<String>> strings = 
+			Files.list(Paths.get("./br/com/casadocodigo/java8"))
+				.filter(p -> p.toString().endsWith(".java"))
+				.map(p -> lines(p));
+
+
+		Files.list(Paths.get("./br/com/casadocodigo/java8"))
+			.filter(p -> p.toString().endsWith(".java"))
+			.flatMap(p -> lines(p))
+			.forEach(System.out::println);
+
 
 		// stream infinito:
 
@@ -128,6 +141,14 @@ class Capitulo8 {
 
 
 
+	}
+
+	static Stream<String> lines(Path p) {
+		try {
+			return Files.lines(p);
+		} catch(IOException e) {
+			throw new UncheckedIOException(e);
+		}
 	}
 }
 

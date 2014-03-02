@@ -1,11 +1,43 @@
 package br.com.casadocodigo.java8;
 
 import java.util.*;
+import java.io.*;
+import java.nio.file.*;
 import java.util.stream.*;
 import java.util.function.*;
 
+
 class Capitulo9 {
-	public static void main (String... args) {
+	public static void main (String... args) throws Exception 	{
+
+		Map<Path, Long> lines = 
+			Files.list(Paths.get("./br/com/casadocodigo/java8"))
+				.filter(p -> p.toString().endsWith(".java"))
+				.collect(Collectors.toMap(
+						p -> p, 
+						p -> lines(p).count()));
+		System.out.println(lines);
+
+		Map<Path, Long> classes = 
+			Files.list(Paths.get("./br/com/casadocodigo/java8"))
+				.filter(p -> p.toString().endsWith(".java"))
+				.collect(Collectors.toMap(
+						p -> p, 
+						p -> lines(p)
+							.filter(s -> s.contains("class"))
+							.count()));
+		System.out.println(classes);
+
+		Map<Path, List<String>> linesPerFile = 
+			Files.list(Paths.get("./br/com/casadocodigo/java8"))
+				.filter(p -> p.toString().endsWith(".java"))
+				.collect(Collectors.toMap(
+						p -> p, 
+						p -> lines(p).collect(Collectors.toList())));
+
+
+
+
 		Usuario user1 = new Usuario("Paulo Silveira", 150, true);
 		Usuario user2 = new Usuario("Rodrigo Turini", 120, true);
 		Usuario user3 = new Usuario("Guilherme Silveira", 90);
@@ -69,5 +101,14 @@ class Capitulo9 {
 			.reduce(new ArrayList<Usuario>(), (l1, l2) -> {l1.addAll(l2); return l1;});
 */		
 	}
+
+	static Stream<String> lines(Path p) {
+		try {
+			return Files.lines(p);
+		} catch(IOException e) {
+			throw new UncheckedIOException(e);
+		}
+	}
+
 }
 

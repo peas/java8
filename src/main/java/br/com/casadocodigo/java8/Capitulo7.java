@@ -1,6 +1,7 @@
 package br.com.casadocodigo.java8;
 
 import java.util.*;
+import java.math.*;
 import java.util.stream.*;
 import java.util.function.*;
 
@@ -59,22 +60,29 @@ class Capitulo7 {
 		IntStream stream3 = usuarios.stream().mapToInt(Usuario::getPontos);
 
 		double pontuacaoMedia = usuarios.stream()
-			.mapToInt(Usuario::getPontos).average().getAsDouble();
+			.mapToInt(Usuario::getPontos)
+			.average()
+			.getAsDouble();
 
 		usuarios.stream()
-			.mapToInt(Usuario::getPontos).average().orElseThrow(IllegalStateException::new);
+			.mapToInt(Usuario::getPontos)
+			.average()
+			.orElseThrow(IllegalStateException::new);
 
 		List<Usuario> vazia = Collections.emptyList();
 
 
 		double media = vazia.stream()
-			.mapToInt(Usuario::getPontos).average().orElse(0.0);
+			.mapToInt(Usuario::getPontos)
+			.average()
+			.orElse(0.0);
 
-		OptionalDouble media2 = usuarios.stream()
-			.mapToInt(Usuario::getPontos).average();
+		OptionalDouble media2 = usuarios
+			.stream()
+			.mapToInt(Usuario::getPontos)
+			.average();
 
 		double pontuacaoMedia2 = media2.orElse(0.0);
-
 
 	}
 }
