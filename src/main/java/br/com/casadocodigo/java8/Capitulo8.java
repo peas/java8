@@ -66,38 +66,6 @@ class Capitulo8 {
 		boolean hasModerator = usuarios.stream().anyMatch(Usuario::isModerador);
 
 
-		// flatmap e java.nio.files
-
-		Files.list(Paths.get("./br/com/casadocodigo/java8"))
-			.forEach(System.out::println);
-
-		Files.list(Paths.get("./br/com/casadocodigo/java8"))
-			.filter(p -> p.toString().endsWith(".java"))
-			.forEach(System.out::println);
-
-
-		Files.list(Paths.get("./br/com/casadocodigo/java8"))
-			.filter(p -> p.toString().endsWith(".java"))
-			.map(p -> lines(p))
-			.forEach(System.out::println);
-
-		Stream<Stream<String>> strings = 
-			Files.list(Paths.get("./br/com/casadocodigo/java8"))
-				.filter(p -> p.toString().endsWith(".java"))
-				.map(p -> lines(p));
-
-		Files.list(Paths.get("./br/com/casadocodigo/java8"))
-			.filter(p -> p.toString().endsWith(".java"))
-			.flatMap(p -> lines(p))
-			.forEach(System.out::println);
-
-		
-		IntStream chars =
-			Files.list(Paths.get("./br/com/casadocodigo/java8"))
-				.filter(p -> p.toString().endsWith(".java"))
-				.flatMap(p -> lines(p))
-				.flatMapToInt((String s) -> s.chars());
-
 
 		// stream infinito:
 
@@ -140,6 +108,54 @@ class Capitulo8 {
 			.limit(10)
 			.forEach(System.out::println);		
 
+
+
+		// flatmap e java.nio.files
+
+		Files.list(Paths.get("./br/com/casadocodigo/java8"))
+			.forEach(System.out::println);
+
+		Files.list(Paths.get("./br/com/casadocodigo/java8"))
+			.filter(p -> p.toString().endsWith(".java"))
+			.forEach(System.out::println);
+
+
+		Files.list(Paths.get("./br/com/casadocodigo/java8"))
+			.filter(p -> p.toString().endsWith(".java"))
+			.map(p -> lines(p))
+			.forEach(System.out::println);
+
+		Stream<Stream<String>> strings = 
+			Files.list(Paths.get("./br/com/casadocodigo/java8"))
+				.filter(p -> p.toString().endsWith(".java"))
+				.map(p -> lines(p));
+
+		Files.list(Paths.get("./br/com/casadocodigo/java8"))
+			.filter(p -> p.toString().endsWith(".java"))
+			.flatMap(p -> lines(p))
+			.forEach(System.out::println);
+
+		
+		IntStream chars =
+			Files.list(Paths.get("./br/com/casadocodigo/java8"))
+				.filter(p -> p.toString().endsWith(".java"))
+				.flatMap(p -> lines(p))
+				.flatMapToInt((String s) -> s.chars());
+
+
+		Grupo englishSpeakers = new Grupo();
+		englishSpeakers.add(user1);
+		englishSpeakers.add(user2);
+
+		Grupo spanishSpeakers = new Grupo();
+		spanishSpeakers.add(user2);
+		spanishSpeakers.add(user3);
+
+		List<Grupo> groups = Arrays.asList(englishSpeakers, spanishSpeakers);
+		groups.stream()
+			.flatMap(g -> g.getUsuarios().stream())
+			.distinct()
+			.forEach(System.out::println);
 
 
 

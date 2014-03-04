@@ -1,5 +1,7 @@
 package br.com.casadocodigo.java8;
 
+import java.util.*;
+
 class Usuario {
 	
 	private int pontos;
@@ -40,5 +42,17 @@ class Usuario {
 
 	public boolean isModerador() {
 		return moderador;
+	}
+}
+
+class Grupo {
+	private Set<Usuario> usuarios = new HashSet<>();
+
+	public void add(Usuario u) {
+		usuarios.add(u);
+	}
+
+	public Set<Usuario> getUsuarios() {
+		return Collections.unmodifiableSet(this.usuarios);
 	}
 }
