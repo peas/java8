@@ -8,18 +8,44 @@ import java.util.function.*;
 
 
 class Capitulo9 {
+
+	private static long total = 0;
+
 	public static void main (String... args) throws Exception 	{
 
-		Map<Path, Long> lines = 
+
+		LongStream lines = 
+			Files.list(Paths.get("./br/com/casadocodigo/java8"))
+				.filter(p -> p.toString().endsWith(".java"))
+				.mapToLong(p -> lines(p).count());
+
+		List<Long> lines2 = 
+			Files.list(Paths.get("./br/com/casadocodigo/java8"))
+				.filter(p -> p.toString().endsWith(".java"))
+				.map(p -> lines(p).count())
+				.collect(Collectors.toList());	
+
+		{
+			Map<Path, Long> linesPerFile =  new HashMap<>();
+			Files.list(Paths.get("./br/com/casadocodigo/java8"))
+				.filter(p -> p.toString().endsWith(".java"))
+				.forEach(p -> 
+					linesPerFile.put(p, lines(p).count()));
+			System.out.println(linesPerFile);
+				
+		}
+		Map<Path, Long> linesPerFile = 
 			Files.list(Paths.get("./br/com/casadocodigo/java8"))
 				.filter(p -> p.toString().endsWith(".java"))
 				.collect(Collectors.toMap(
-						p -> p, 
+						Function.identity(), 
 						p -> lines(p).count()));
-		System.out.println(lines);
+
+		System.out.println(linesPerFile);
 
 
-		Map<Path, List<String>> linesPerFile = 
+
+		Map<Path, List<String>> content = 
 			Files.list(Paths.get("./br/com/casadocodigo/java8"))
 				.filter(p -> p.toString().endsWith(".java"))
 				.collect(Collectors.toMap(
@@ -37,15 +63,13 @@ class Capitulo9 {
 
 		List<Usuario> usuarios = Arrays.asList(user1, user2, user3, user4, user5);
 
-			ArrayList<Usuario> usuarioss = usuarios.stream()
-			.filter(u -> u.getPontos() > 100)
-			.reduce(new ArrayList<Usuario>() {{System.out.println("x");}} , 
-					(l, u) -> { l.add(u); return l; } ,
-					(l1, l2) -> {System.out.println("YYY");l1.addAll(l2); return l1;});
+		Map<String, Usuario> nameToUser = usuarios
+			.stream()
+			.collect(Collectors.toMap(
+						Usuario::getNome, 
+						Function.identity()));
+		System.out.println(nameToUser);
 
-
-			System.out.println(usuarios);	
-			System.exit(0);
 
 		Map<Integer, List<Usuario>> pontuacaoVelha = new HashMap<>();
 		
@@ -95,6 +119,17 @@ class Capitulo9 {
 
 		System.out.println(nomesPorTipo);
 
+		long sum = 
+			LongStream.range(0, 1_000_000_000)
+			.parallel()
+			.sum();
+		System.out.println(sum);
+
+		// nao faca:
+		LongStream.range(0, 1_000_000_000)
+			.parallel()
+			.forEach(n -> total += n);
+		System.out.println(total);
 
 	}
 

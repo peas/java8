@@ -1,12 +1,13 @@
 package br.com.casadocodigo.java8;
 
 import java.util.*;
+import java.io.*;
 import java.math.*;
 import java.util.stream.*;
 import java.util.function.*;
 
 class Capitulo7 {
-	public static void main (String... args) {
+	public static void main (String... args) throws Exception {
 
 		Usuario u1 = new Usuario("Paulo Silveira", 150);
 		Usuario u2 = new Usuario("Rodrigo Turini", 120);
@@ -83,6 +84,16 @@ class Capitulo7 {
 			.average();
 
 		double pontuacaoMedia2 = media2.orElse(0.0);
+
+		Optional<Usuario> max = usuarios
+			.stream()
+			.max(Comparator.comparingInt(Usuario::getPontos));
+
+		Optional<String> maxNome = usuarios
+			.stream()
+			.max(Comparator.comparingInt(Usuario::getPontos))
+			.map(u -> u.getNome());
+
 
 	}
 }
