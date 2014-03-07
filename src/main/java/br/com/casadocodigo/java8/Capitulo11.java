@@ -1,173 +1,167 @@
 package br.com.casadocodigo.java8;
 
-import java.text.SimpleDateFormat;
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.Month;
-import java.time.MonthDay;
-import java.time.Period;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.TextStyle;
-import java.time.temporal.ChronoUnit;
-import java.util.Calendar;
-import java.util.Locale;
+import java.util.*;
+import java.io.*;
+import java.nio.file.*;
+import java.util.stream.*;
+import java.util.function.*;
 
-public class Capitulo11 {
+class Type {
+	MUSIC, VIDEO, IMAGE;
+}
 
-	public static void main(String[] args) {
+class Product {
+	BigDecimal price;
+	String name;
+	String file;
+}
+
+class Payment {
+	List<Product> products;
+	DateTime
+
+}
+
+class Subscription {
+	BigDecimal monthlyFee;
+	DateTime begin;
+	Optional<DateTime> end;
+
+}
+
+
+class Capitulo11 {
+
+	private static long total = 0;
+
+	public static void main (String... args) throws Exception 	{
+
+
+		LongStream lines = 
+			Files.list(Paths.get("./br/com/casadocodigo/java8"))
+				.filter(p -> p.toString().endsWith(".java"))
+				.mapToLong(p -> lines(p).count());
+
+		List<Long> lines2 = 
+			Files.list(Paths.get("./br/com/casadocodigo/java8"))
+				.filter(p -> p.toString().endsWith(".java"))
+				.map(p -> lines(p).count())
+				.collect(Collectors.toList());	
+
+		{
+			Map<Path, Long> linesPerFile =  new HashMap<>();
+			Files.list(Paths.get("./br/com/casadocodigo/java8"))
+				.filter(p -> p.toString().endsWith(".java"))
+				.forEach(p -> 
+					linesPerFile.put(p, lines(p).count()));
+			System.out.println(linesPerFile);
+				
+		}
+		Map<Path, Long> linesPerFile = 
+			Files.list(Paths.get("./br/com/casadocodigo/java8"))
+				.filter(p -> p.toString().endsWith(".java"))
+				.collect(Collectors.toMap(
+						Function.identity(), 
+						p -> lines(p).count()));
+
+		System.out.println(linesPerFile);
+
+
+
+		Map<Path, List<String>> content = 
+			Files.list(Paths.get("./br/com/casadocodigo/java8"))
+				.filter(p -> p.toString().endsWith(".java"))
+				.collect(Collectors.toMap(
+						p -> p, 
+						p -> lines(p).collect(Collectors.toList())));
+
+
+
+
+		Usuario user1 = new Usuario("Paulo Silveira", 150, true);
+		Usuario user2 = new Usuario("Rodrigo Turini", 120, true);
+		Usuario user3 = new Usuario("Guilherme Silveira", 90);
+		Usuario user4 = new Usuario("Sergio Lopes", 120);
+		Usuario user5 = new Usuario("Adriano Almeida", 100);
+
+		List<Usuario> usuarios = Arrays.asList(user1, user2, user3, user4, user5);
+
+		Map<String, Usuario> nameToUser = usuarios
+			.stream()
+			.collect(Collectors.toMap(
+						Usuario::getNome, 
+						Function.identity()));
+		System.out.println(nameToUser);
+
+
+		Map<Integer, List<Usuario>> pontuacaoVelha = new HashMap<>();
 		
-		// incrementando um mês com Calendar
-		Calendar mesQueVem = Calendar.getInstance();
-		mesQueVem.add(Calendar.MONTH, 1);
+		for(Usuario u: usuarios) {
+			if(!pontuacaoVelha.containsKey(u.getPontos())) {
+				pontuacaoVelha.put(u.getPontos(), new ArrayList<>());
+			}
+			pontuacaoVelha.get(u.getPontos()).add(u);
+		}
+
+		System.out.println(pontuacaoVelha);		
+
+		Map<Integer, List<Usuario>> pontuacaoJ8 = new HashMap<>();
 		
-		// incrementando um mês com LocalDate
-		LocalDate mesQueVem2 = LocalDate.now().plusMonths(1);
-		
-		// decrementando um mês com LocalDate
-		LocalDate anoPassado = LocalDate.now().minusYears(1);
-		
-		// LocalDateTime
-		
-		LocalDateTime agora = LocalDateTime.now(); 
-		System.out.println(agora);
+		for(Usuario u: usuarios) {
+			pontuacaoJ8
+				.computeIfAbsent(u.getPontos(), user -> new ArrayList<>())
+				.add(u);
+		}
 
-		// construindo um LocalDateTime a partir de um LocalDate
-		LocalDateTime hojeAoMeioDia = LocalDate.now().atTime(12,0);
+		System.out.println(pontuacaoJ8);		
 
-		// construindo um LocalDateTime pela junção de um LocalDate com LocalTime
-		
-		LocalTime agora3 = LocalTime.now();
-		LocalDate hoje = LocalDate.now();
-		LocalDateTime dataEhora = hoje.atTime(agora3);
 
-		// adicionando informação de timezone para ter um ZonedDateTime.
-		ZonedDateTime dataComHoraETimezone = 
-			dataEhora.atZone(ZoneId.of("America/Sao_Paulo"));
+		Map<Integer, List<Usuario>> pontuacao = usuarios
+			.stream()
+			.collect(Collectors.groupingBy(Usuario::getPontos));
 
-		// de ZonedDateTime para LocalDateTime
-		
-		LocalDateTime semTimeZone = dataComHoraETimezone.toLocalDateTime();
+		System.out.println(pontuacao);
 
-		// criando a partir do factory method *of*
-		
-		LocalDate date = LocalDate.of(2014, 12, 25);
-		LocalDateTime dateTime = LocalDateTime.of(2014, 12, 25, 10, 30);
+		Map<Boolean, List<Usuario>> moderadores = usuarios
+		 	.stream()
+		 	.collect(Collectors.partitioningBy(Usuario::isModerador));
 
-		// utilizando métodos *with* para adicionar valores
-		
-		LocalDate dataDoPassado = LocalDate.now().withYear(1988);
+		System.out.println(moderadores);
 
-		System.out.println(dataDoPassado.getYear());
-		
-		// comparações entre datas com os métodos *is*
+		Map<Boolean, Integer> pontuacaoPorTipo = usuarios
+		 	.stream()
+            .collect(Collectors.partitioningBy(u -> u.isModerador(),
+            	Collectors.summingInt(Usuario::getPontos)));
 
-		LocalDate amanha = LocalDate.now().plusDays(1);
+		System.out.println(pontuacaoPorTipo);
 
-		System.out.println(hoje.isBefore(amanha));
-		System.out.println(hoje.isAfter(amanha));
-		System.out.println(hoje.isEqual(amanha));
+		Map<Boolean, List<String>> nomesPorTipo = usuarios
+		 	.stream()
+            .collect(Collectors.partitioningBy(u -> u.isModerador(),
+            	Collectors.mapping(Usuario::getNome, Collectors.toList())));
 
-		// dia do mês atual a partir do MonthDay
-		
-		System.out.println("hoje é dia: "+ MonthDay.now().getDayOfMonth());
-		
-		// enum Month
-		
-		System.out.println(LocalDate.of(2014, 12, 25)); 
-		System.out.println(LocalDate.of(2014, Month.DECEMBER, 25));	
-		
-		System.out.println(Month.DECEMBER.firstMonthOfQuarter());
-		System.out.println(Month.DECEMBER.plus(2)); 
-		System.out.println(Month.DECEMBER.minus(1));
+		System.out.println(nomesPorTipo);
 
-		// formatando  e exibindo os modelos de data
-		
-		Locale pt = new Locale("pt");
+		long sum = 
+			LongStream.range(0, 1_000_000_000)
+			.parallel()
+			.sum();
+		System.out.println(sum);
 
-		System.out.println(Month.DECEMBER
-			.getDisplayName(TextStyle.FULL, pt));
-
-		System.out.println(Month.DECEMBER
-			.getDisplayName(TextStyle.SHORT, pt));
-
-		String resultado = agora.format(DateTimeFormatter.ISO_LOCAL_TIME);
-
-		agora.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-
-		// parseando de String para LocalDate
-		
-		DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-		String resultado2 = agora.format(formatador);
-		LocalDate agoraEmData = LocalDate.parse(resultado2, formatador);
-
-		// formatando com Calendar
-		
-		Calendar instante = Calendar.getInstance();
-		instante.set(2014, Calendar.FEBRUARY, 30);		
-		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yy");
-		System.out.println(dateFormat.format(instante.getTime()));
-
-		// data e hora inválida
-		
-		LocalDate.of(2014, Month.FEBRUARY, 30);
-
-		LocalDateTime horaInvalida = LocalDate.now().atTime(25, 0);
-
-		// diferença de dias com Calendar
-		
-		Calendar calendar = Calendar.getInstance();
-
-		Calendar outraData = Calendar.getInstance();
-		outraData.set(1988, Calendar.JANUARY, 25);
-
-		long diferenca = calendar.getTimeInMillis() - outraData.getTimeInMillis();
-
-		long milissegundosDeUmDia = 1000 * 60 * 60 * 24;
-
-		long dias = diferenca / milissegundosDeUmDia;
-
-		// diferença de dias com ChronoUnit
-		
-		LocalDate agora4 = LocalDate.now();
-		LocalDate outraData2 = LocalDate.of(1989, Month.JANUARY, 25);
-		long dias2 = ChronoUnit.DAYS.between(outraData2, agora4);
-		
-		// diferença de meses e anos
-		
-		long meses = ChronoUnit.MONTHS.between(outraData2, agora4);
-		long anos = ChronoUnit.YEARS.between(outraData2, agora4);
-		System.out.printf("%s dias, %s meses e %s anos", dias2, meses, anos);
-
-		// periodo entre duas datas
-		
-		LocalDate outraData3 = LocalDate.of(1989, Month.JANUARY, 25);
-		Period periodo = Period.between(outraData3, agora4);
-		System.out.printf("%s dias, %s meses e %s anos", 
-			periodo.getDays(), periodo.getMonths(), periodo.getYears());
-
-		// invertendo valores do periodo
-		
-		Period periodo2 = Period.between(outraData3, agora4);
-
-		if (periodo2.isNegative()) periodo2 = periodo2.negated();
-
-		System.out.printf("%s dias, %s meses e %s anos", 
-			periodo2.getDays(), periodo2.getMonths(), periodo2.getYears());
-
-		// o mesmo, só que agora trabalhando com duração
-		
-		LocalDateTime agora5 = LocalDateTime.now();
-		LocalDateTime daquiAUmaHora = agora5.plusHours(1);
-		Duration duration = Duration.between(agora5, daquiAUmaHora);
-
-		if (duration.isNegative()) duration = duration.negated();
-
-		System.out.printf("%s horas, %s minutos e %s segundos", 
-			duration.toHours(), duration.toMinutes(), duration.getSeconds());
+		// nao faca:
+		LongStream.range(0, 1_000_000_000)
+			.parallel()
+			.forEach(n -> total += n);
+		System.out.println(total);
 
 	}
+
+	static Stream<String> lines(Path p) {
+		try {
+			return Files.lines(p);
+		} catch(IOException e) {
+			throw new UncheckedIOException(e);
+		}
+	}
+
 }
