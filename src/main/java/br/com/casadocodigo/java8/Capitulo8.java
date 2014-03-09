@@ -16,25 +16,28 @@ class Capitulo8 {
 		List<Usuario> usuarios = Arrays.asList(user1, user2, user3);
 
 		// peek mostra so os processados:
-		usuarios.stream().filter(u -> u.getPontos() > 100)
-				.peek(System.out::println).findAny();
+		usuarios.stream()
+			.filter(u -> u.getPontos() > 100)
+			.peek(System.out::println).findAny();
 
 		System.out.println();
 
 		// peek é apens intermeridiario:
 
-		usuarios.stream().filter(u -> u.getPontos() > 100)
-				.peek(System.out::println);  // precisa chamar terminal!
+		usuarios.stream()
+			.filter(u -> u.getPontos() > 100)
+			.peek(System.out::println);  // precisa chamar terminal!
 
 		System.out.println();
 
 		// sort é operador intermediario, porem stateful:
-		usuarios.stream().sorted(Comparator.comparing(Usuario::getNome))
-				.peek(System.out::println).findAny();
+		usuarios.stream()
+			.sorted(Comparator.comparing(Usuario::getNome))
+			.peek(System.out::println)
+			.findAny();
 
 		System.out.println();
 
-		
 
 		usuarios.stream()
 			.sorted(Comparator.comparing(Usuario::getNome))
@@ -44,6 +47,7 @@ class Capitulo8 {
 		Usuario maximaPontuacao = usuarios.stream()
 			.max(Comparator.comparing(Usuario::getPontos))
 			.get();
+
 		int total = usuarios.stream()
 			.mapToInt(Usuario::getPontos)
 			.sum();
@@ -63,7 +67,8 @@ class Capitulo8 {
 		int total3 = usuarios.stream()
 			.reduce(0, (atual, u) -> atual + u.getPontos(), Integer::sum);	
 
-		boolean hasModerator = usuarios.stream().anyMatch(Usuario::isModerador);
+		boolean hasModerator = usuarios.stream()
+			.anyMatch(Usuario::isModerador);
 
 
 
@@ -73,7 +78,7 @@ class Capitulo8 {
 		IntStream stream = IntStream.generate(() -> random.nextInt());
 
 		// loop infinito
-		//int valor = stream.sum();
+		// int valor = stream.sum();
 
 		List<Integer> list = IntStream
 			.generate(() -> random.nextInt())
@@ -156,8 +161,6 @@ class Capitulo8 {
 			.flatMap(g -> g.getUsuarios().stream())
 			.distinct()
 			.forEach(System.out::println);
-
-
 
 	}
 
