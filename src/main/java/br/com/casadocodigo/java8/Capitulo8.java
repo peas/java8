@@ -15,6 +15,11 @@ class Capitulo8 {
 
 		List<Usuario> usuarios = Arrays.asList(user1, user2, user3);
 
+		List<Usuario> filtradosOrdenados = usuarios.stream()
+			.filter(u -> u.getPontos() > 100)
+			.sorted(Comparator.comparing(Usuario::getNome))
+			.collect(Collectors.toList());
+
 		// peek mostra so os processados:
 		usuarios.stream()
 			.filter(u -> u.getPontos() > 100)

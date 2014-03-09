@@ -38,27 +38,34 @@ class Capitulo7 {
 		BiConsumer<ArrayList<Usuario>, Usuario> accumulator = ArrayList::add;
 		BiConsumer<ArrayList<Usuario>,ArrayList<Usuario>> combiner = ArrayList::addAll;
 
-		usuarios.stream().filter(u -> u.getPontos() > 100)
+		usuarios.stream()
+			.filter(u -> u.getPontos() > 100)
 			.collect(supplier, accumulator, combiner);
 
-		usuarios.stream().filter(u -> u.getPontos() > 100)
+		usuarios.stream()
+			.filter(u -> u.getPontos() > 100)
 			.collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
 
 		List<Usuario> maisQue100 = usuarios.stream()
-			.filter(u -> u.getPontos() > 100).collect(Collectors.toList());
+			.filter(u -> u.getPontos() > 100)
+			.collect(Collectors.toList());
 
 		ArrayList<Integer> pontos = new ArrayList<>();
 		usuarios.forEach(u -> pontos.add(u.getPontos()));
 
 		List<Integer> pontos2 = usuarios.stream()
-			.map(u -> u.getPontos()).collect(Collectors.toList());
+			.map(u -> u.getPontos())
+			.collect(Collectors.toList());
 
 		List<Integer> pontos3 = usuarios.stream()
-			.map(Usuario::getPontos).collect(Collectors.toList());
+			.map(Usuario::getPontos)
+			.collect(Collectors.toList());
 
-		Stream<Integer> stream2 = usuarios.stream().map(Usuario::getPontos);
+		Stream<Integer> stream2 = usuarios.stream()
+			.map(Usuario::getPontos);
 
-		IntStream stream3 = usuarios.stream().mapToInt(Usuario::getPontos);
+		IntStream stream3 = usuarios.stream()
+			.mapToInt(Usuario::getPontos);
 
 		double pontuacaoMedia = usuarios.stream()
 			.mapToInt(Usuario::getPontos)

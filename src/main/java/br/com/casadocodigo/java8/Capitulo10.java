@@ -16,7 +16,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class Capitulo11 {
+public class Capitulo10 {
 
 	public static void main(String[] args) {
 		

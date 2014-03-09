@@ -119,6 +119,15 @@ class Capitulo9 {
 
 		System.out.println(nomesPorTipo);
 
+
+
+		// PARALLEL
+
+		List<Usuario> filtradosOrdenados = usuarios.parallelStream()
+			.filter(u -> u.getPontos() > 100)
+			.sorted(Comparator.comparing(Usuario::getNome))
+			.collect(Collectors.toList());
+
 		long sum = 
 			LongStream.range(0, 1_000_000_000)
 			.parallel()
