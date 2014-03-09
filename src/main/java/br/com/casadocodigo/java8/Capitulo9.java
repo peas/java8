@@ -13,7 +13,6 @@ class Capitulo9 {
 
 	public static void main (String... args) throws Exception 	{
 
-
 		LongStream lines = 
 			Files.list(Paths.get("./br/com/casadocodigo/java8"))
 				.filter(p -> p.toString().endsWith(".java"))
@@ -130,11 +129,14 @@ class Capitulo9 {
 
 		long sum = 
 			LongStream.range(0, 1_000_000_000)
+			.filter(x -> x % 2 == 0)
 			.parallel()
 			.sum();
 		System.out.println(sum);
 
+		System.exit(0);
 		// nao faca:
+		
 		LongStream.range(0, 1_000_000_000)
 			.parallel()
 			.forEach(n -> total += n);
