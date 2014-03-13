@@ -150,7 +150,14 @@ public class Capitulo11 {
 		// que tipo de produto é o mais vendido (sum(VIDEO), sum(AUDIO))
 
 		// quero map<Product, BigDecimal>
+		
+		payments.stream()
+			.map(Payment::getProducts)
+			.flatMap(p -> p.stream())
+			.collect(Collectors.groupingBy(Function.identity(), 
+					 Collectors.reducing(BigDecimal.ZERO, Product::getPrice, BigDecimal::add)));
 
+		
 		// quero map<MonthYear, Map<Product, BigDecimal>>
 
 		// quero map<Customer, List<Payment>>, list ordenado por horario da compra
