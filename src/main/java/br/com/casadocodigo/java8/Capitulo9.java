@@ -134,14 +134,6 @@ class Capitulo9 {
 			.sum();
 		System.out.println(sum);
 
-		System.exit(0);
-		// nao faca:
-		
-		LongStream.range(0, 1_000_000_000)
-			.parallel()
-			.forEach(n -> total += n);
-		System.out.println(total);
-
 	}
 
 	static Stream<String> lines(Path p) {
@@ -154,3 +146,15 @@ class Capitulo9 {
 
 }
 
+class UnsafeParallelStreamUsage {
+	private static long total = 0;
+
+	public static void main (String... args) throws Exception 	{
+		LongStream.range(0, 1_000_000_000)
+			.parallel()
+			.filter(x -> x % 2 == 0)
+			.forEach(n -> total += n);
+
+		System.out.println(total);
+	}
+}
