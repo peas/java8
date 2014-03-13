@@ -161,7 +161,12 @@ public class Capitulo11 {
 		// quero map<MonthYear, Map<Product, BigDecimal>>
 
 		// quero map<Customer, List<Payment>>, list ordenado por horario da compra
-
+		
+		Map<Customer, List<Payment>> collect2 = payments.stream()
+//			.sorted(Comparator.comparing(Payment::getDate)) // pela pela data
+			.sorted(Comparator.comparing(p -> p.getDate().toLocalTime())) // pela hora
+			.collect(Collectors.groupingBy(Payment::customer));
+		
 		// quero map<Customer, List<Product>>, flatMap
 
 		// quero map<Customer, Type>, qual é o tipo de produto que ele mais comprou
