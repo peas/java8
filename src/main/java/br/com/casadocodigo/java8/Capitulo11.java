@@ -10,7 +10,10 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 enum Type {
 	MUSIC, 
@@ -114,8 +117,8 @@ public class Capitulo11 {
 		
 		Payment payment1 = new Payment(asList(p1, p2), today, paulo);
 		Payment payment2 = new Payment(asList(p3, p1, p6), yesterday, rodrigo);
-		Payment payment4 = new Payment(asList(p6, p1, p2), tomorrow, guilherme);
 		Payment payment3 = new Payment(asList(p4, p5, p1), today, adriano);
+		Payment payment4 = new Payment(asList(p6, p1, p2), tomorrow, guilherme);
 		
 		List<Payment> payments = asList(payment1, payment2, payment3, payment4);
 		// ordenar List<Payment> por data
@@ -134,6 +137,13 @@ public class Capitulo11 {
 			.reduce(BigDecimal::add);			
 
 		// qual é o produto mais vendido?
+		
+		Map<Product, Long> collect = payments.stream()
+			.map(Payment::getProducts)
+			.flatMap(p -> p.stream())
+			.collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+		
+		System.out.println(collect);
 		
 		// qual é o usuario que mais pagou
 
