@@ -89,6 +89,7 @@ class Subscription {
 	BigDecimal monthlyFee;
 	LocalDateTime begin;
 	Optional<LocalDateTime> end;
+	Customer customer;
 
 }
 
@@ -162,10 +163,13 @@ public class Capitulo11 {
 
 		// quero map<Customer, List<Payment>>, list ordenado por horario da compra
 		
-		Map<Customer, List<Payment>> collect2 = payments.stream()
+		//Map<Customer, List<Payment>>
+		payments.stream()
 //			.sorted(Comparator.comparing(Payment::getDate)) // pela pela data
 			.sorted(Comparator.comparing(p -> p.getDate().toLocalTime())) // pela hora
-			.collect(Collectors.groupingBy(Payment::customer));
+			.collect(Collectors.groupingBy(Payment::customer))
+			.entrySet()
+			.forEach(System.out::println);
 		
 		// quero map<Customer, List<Product>>, flatMap
 
@@ -177,13 +181,19 @@ public class Capitulo11 {
 
 
 
-		Usuario user1 = new Usuario("Paulo Silveira", 150, true);
-		Usuario user2 = new Usuario("Rodrigo Turini", 120, true);
-		Usuario user3 = new Usuario("Guilherme Silveira", 90);
-		Usuario user4 = new Usuario("Sergio Lopes", 120);
-		Usuario user5 = new Usuario("Adriano Almeida", 100);
 
-		List<Usuario> usuarios = Arrays.asList(user1, user2, user3, user4, user5);
+
+		// subscriptions
+
+		// dada uma unica subscription, calcular quanto ele pagou ate hoje
+			// algo como calculaMesesEntre(subscription.getBegin(), subscription.getEnd().orElse(today))
+			// e ai multiplica pelo mnthlyFee
+
+		// dada uma colecao de subscription, calcular quanto todos pagaram ate hoje
+		
+		// achar o usuario que mais pagou total de valor de subscriptions ate hoje	
+		// achar o usuario que ficou mais meses pagando (independente dela estar ativa ou nao)
+
 	}	
 
 }
