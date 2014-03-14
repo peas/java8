@@ -6,7 +6,6 @@ import java.math.BigDecimal;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -173,6 +172,12 @@ public class Capitulo11 {
 		
 		// quero map<Customer, List<Product>>, flatMap
 
+		Map<Customer, List<List<Product>>> mapa = payments.stream() 
+		// como eu faço o flatmap dentro do Collectors.mapping ?
+		.collect(Collectors.groupingBy(Payment::customer, 
+				Collectors.mapping(Payment::getProducts, Collectors.toList())));
+		
+		
 		// quero map<Customer, Type>, qual é o tipo de produto que ele mais comprou
 
 		// quero map<MonthYear, List<Payment>> agrupar por mes as vendas
