@@ -6,6 +6,8 @@ import java.math.BigDecimal;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -114,6 +116,12 @@ class Subscription {
 	public Customer getCustomer() {
 		return customer;
 	}
+	
+	public BigDecimal getTotalPaidMonths() {
+
+		return BigDecimal.valueOf(ChronoUnit.MONTHS.between(
+			getBegin(), getEnd().orElse(LocalDateTime.now())));
+	}
 }
 
 
@@ -214,15 +222,37 @@ public class Capitulo11 {
 
 		// subscriptions
 
+		BigDecimal monthlyFee = new BigDecimal("179.90");
+		
+		Subscription s1 = new Subscription(monthlyFee, 
+				today.minusMonths(5), Optional.empty(), paulo);
+		
+		Subscription s2 = new Subscription(monthlyFee, 
+				today.minusMonths(2), Optional.of(today.plusMonths(5)), rodrigo);
+		
+		Subscription s3 = new Subscription(monthlyFee, 
+				today.minusMonths(1), Optional.of(today.plusMonths(1)), adriano);
+		
+		List<Subscription> subscriptions = Arrays.asList(s1, s2, s3);
+		
+		
 		// dada uma unica subscription, calcular quanto ele pagou ate hoje
 			// algo como calculaMesesEntre(subscription.getBegin(), subscription.getEnd().orElse(today))
 			// e ai multiplica pelo mnthlyFee
 
+		s1.getTotalPaidMonths().multiply(s1.getMonthlyFee());
+
 		// dada uma colecao de subscription, calcular quanto todos pagaram ate hoje
 		
+		subscriptions.stream()
+			.map(s -> s.getMonthlyFee().multiply(s.getTotalPaidMonths()))
+			.reduce(BigDecimal::add)
+			.orElse(BigDecimal.ZERO);
+		
 		// achar o usuario que mais pagou total de valor de subscriptions ate hoje	
+		
+		
 		// achar o usuario que ficou mais meses pagando (independente dela estar ativa ou nao)
 
-	}	
-
+	}
 }
