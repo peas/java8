@@ -85,11 +85,35 @@ class Payment {
 }
 
 class Subscription {
-	BigDecimal monthlyFee;
-	LocalDateTime begin;
-	Optional<LocalDateTime> end;
-	Customer customer;
+	
+	private BigDecimal monthlyFee;
+	private LocalDateTime begin;
+	private Optional<LocalDateTime> end;
+	private Customer customer;
+	
+	public Subscription(BigDecimal monthlyFee, LocalDateTime begin,
+			Optional<LocalDateTime> end, Customer customer) {
+		this.monthlyFee = monthlyFee;
+		this.begin = begin;
+		this.end = end;
+		this.customer = customer;
+	}
 
+	public BigDecimal getMonthlyFee() {
+		return monthlyFee;
+	}
+
+	public LocalDateTime getBegin() {
+		return begin;
+	}
+
+	public Optional<LocalDateTime> getEnd() {
+		return end;
+	}
+
+	public Customer getCustomer() {
+		return customer;
+	}
 }
 
 
