@@ -15,6 +15,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.function.Function;
 import java.time.format.DateTimeFormatter;
 
 enum Type {
@@ -185,14 +187,46 @@ public class Capitulo11 {
 			.sorted(Comparator.comparing(Payment::getDate))
 			.forEach(System.out::println);
 
+		// somatoria dos valores de  payment1:
+
+		BigDecimal p1total = 
+			payment1.getProducts().stream()
+			.map(Product::getPrice)
+			.reduce(BigDecimal.ZERO, (total, price) -> total.add(price));
+
+		payment1.getProducts().stream()
+			.map(Product::getPrice)
+			.reduce(BigDecimal::add)
+			.ifPresent(System.out::println);
+
 		// somatoria de todos os payments
 
-		payments.stream()
+		Stream<BigDecimal> pricesStream =
+			payments.stream()
 			.map(p -> p.getProducts().stream()
-							.map(Product::getPrice)
-							.reduce(BigDecimal::add))
-			.map(o -> o.orElse(BigDecimal.ZERO))
-			.reduce(BigDecimal::add);			
+				.map(Product::getPrice)
+				.reduce(BigDecimal.ZERO, BigDecimal::add));
+
+
+		BigDecimal total = 
+			payments.stream()
+			.map(p -> p.getProducts().stream()
+						.map(Product::getPrice)
+						.reduce(BigDecimal.ZERO, BigDecimal::add))
+			.reduce(BigDecimal.ZERO, BigDecimal::add);	
+
+		Stream<BigDecimal> priceOfEachProduct = 
+			payments.stream()	
+			.flatMap(p -> p.getProducts().stream().map(Product::getPrice));	
+
+		Function<Payment, Stream<BigDecimal>> mapper = 
+			p -> p.getProducts().stream().map(Product::getPrice);
+		
+
+		BigDecimal totalFlat = 
+			payments.stream()
+			.flatMap(p -> p.getProducts().stream().map(Product::getPrice))
+			.reduce(BigDecimal.ZERO, BigDecimal::add);			
 
 		// qual é o produto mais vendido?
 		
