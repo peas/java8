@@ -148,23 +148,37 @@ public class Capitulo11 {
 		Customer guilherme = new Customer("Guilherme Silveira");
 		Customer adriano = new Customer("Adriano Almeida");
 		
-		Product p1 = new Product("P1", Paths.get(""), new BigDecimal(100));
-		Product p2 = new Product("P2", Paths.get(""), new BigDecimal(90));
-		Product p3 = new Product("P3", Paths.get(""), new BigDecimal(50));
-		Product p4 = new Product("P4", Paths.get(""), new BigDecimal(150));
-		Product p5 = new Product("P5", Paths.get(""), new BigDecimal(200));
-		Product p6 = new Product("P6", Paths.get(""), new BigDecimal(100));
+		Product bach = new Product("Bach", 
+				Paths.get("/music/bach.mp3"), new BigDecimal(100));
+		Product poderosas = new Product("Poderosas - Anita",
+			 Paths.get("/music/poderosas.mp3"), new BigDecimal(90));
+		Product bandeira = new Product("Bandeira",
+				Paths.get("/images/brasil.jpg"), new BigDecimal(50));
+		Product beauty = new Product("Beleza Americana", 
+				Paths.get("beauty.mov"), new BigDecimal(150));
+		Product vingadores = new Product("Vingadores", 
+				Paths.get("/movies/vingadores.mov"), new BigDecimal(200));
+		Product amelie = new Product("Amelie Pulin", 
+				Paths.get("/movies/amelie.mov"), new BigDecimal(100));
 		
 		LocalDateTime today = LocalDateTime.now();
 		LocalDateTime yesterday = today.minusDays(1);
-		LocalDateTime tomorrow = today.plusDays(1);
+		LocalDateTime lastMonth = today.minusMonths(1);
 		
-		Payment payment1 = new Payment(asList(p1, p2), today, paulo);
-		Payment payment2 = new Payment(asList(p3, p1, p6), yesterday, rodrigo);
-		Payment payment3 = new Payment(asList(p4, p5, p1), today, adriano);
-		Payment payment4 = new Payment(asList(p6, p1, p2), tomorrow, guilherme);
-		
-		List<Payment> payments = asList(payment1, payment2, payment3, payment4);
+		Payment payment1 = 
+			new Payment(asList(bach, poderosas), today, paulo);
+		Payment payment2 = 
+			new Payment(asList(bach, bandeira, amelie), yesterday, rodrigo);
+		Payment payment3 = 
+			new Payment(asList(beauty, vingadores, bach), today, adriano);
+		Payment payment4 = 
+			new Payment(asList(bach, poderosas, amelie), lastMonth, guilherme);
+		Payment payment5 = 
+			new Payment(asList(beauty, amelie), yesterday, paulo);
+
+		List<Payment> payments = asList(payment1, payment2, 
+			payment3, payment4, payment5);
+
 		// ordenar List<Payment> por data
 
 		payments.stream()
