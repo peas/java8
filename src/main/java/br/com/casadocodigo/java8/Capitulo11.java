@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.time.format.DateTimeFormatter;
 
 enum Type {
 	MUSIC, 
@@ -44,6 +45,10 @@ class Product {
 	public BigDecimal getPrice() {
 		return this.price;
 	}
+
+	public String toString() {
+		return this.name;
+	}
 }
 
 class Customer {
@@ -54,6 +59,10 @@ class Customer {
 	}
 
 	public String getName() {
+		return this.name;
+	}
+
+	public String toString() {
 		return this.name;
 	}
 }
@@ -84,6 +93,11 @@ class Payment {
 		return this.customer;
 	}
 
+	public String toString() {
+		return "[Payment: " + 
+			date.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) +
+			" " + customer + " " + products + "]";
+	}
 }
 
 class Subscription {
@@ -127,8 +141,6 @@ class Subscription {
 
 public class Capitulo11 {
 
-	private static long total = 0;
-
 	public static void main (String... args) throws Exception 	{
 
 		Customer paulo = new Customer("Paulo Silveira");
@@ -137,11 +149,11 @@ public class Capitulo11 {
 		Customer adriano = new Customer("Adriano Almeida");
 		
 		Product p1 = new Product("P1", Paths.get(""), new BigDecimal(100));
-		Product p2 = new Product("P2", Paths.get(""), new BigDecimal(89.90));
+		Product p2 = new Product("P2", Paths.get(""), new BigDecimal(90));
 		Product p3 = new Product("P3", Paths.get(""), new BigDecimal(50));
-		Product p4 = new Product("P4", Paths.get(""), new BigDecimal(150.99));
+		Product p4 = new Product("P4", Paths.get(""), new BigDecimal(150));
 		Product p5 = new Product("P5", Paths.get(""), new BigDecimal(200));
-		Product p6 = new Product("P6", Paths.get(""), new BigDecimal(180));
+		Product p6 = new Product("P6", Paths.get(""), new BigDecimal(100));
 		
 		LocalDateTime today = LocalDateTime.now();
 		LocalDateTime yesterday = today.minusDays(1);
