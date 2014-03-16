@@ -7,6 +7,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -91,7 +92,7 @@ class Payment {
 		return this.date;
 	}
 
-	public Customer customer() {
+	public Customer getCustomer() {
 		return this.customer;
 	}
 
@@ -150,17 +151,17 @@ public class Capitulo11 {
 		Customer guilherme = new Customer("Guilherme Silveira");
 		Customer adriano = new Customer("Adriano Almeida");
 		
-		Product bach = new Product("Bach", 
+		Product bach = new Product("Bach Completo", 
 				Paths.get("/music/bach.mp3"), new BigDecimal(100));
-		Product poderosas = new Product("Poderosas - Anita",
+		Product poderosas = new Product("Poderosas Anita",
 			 Paths.get("/music/poderosas.mp3"), new BigDecimal(90));
-		Product bandeira = new Product("Bandeira",
+		Product bandeira = new Product("Bandeira Brasil",
 				Paths.get("/images/brasil.jpg"), new BigDecimal(50));
 		Product beauty = new Product("Beleza Americana", 
 				Paths.get("beauty.mov"), new BigDecimal(150));
-		Product vingadores = new Product("Vingadores", 
+		Product vingadores = new Product("Os Vingadores", 
 				Paths.get("/movies/vingadores.mov"), new BigDecimal(200));
-		Product amelie = new Product("Amelie Pulin", 
+		Product amelie = new Product("Amelie Poulain", 
 				Paths.get("/movies/amelie.mov"), new BigDecimal(100));
 		
 		LocalDateTime today = LocalDateTime.now();
@@ -230,53 +231,119 @@ public class Capitulo11 {
 
 		// qual é o produto mais vendido?
 		
-		Map<Product, Long> collect = payments.stream()
-			.map(Payment::getProducts)
-			.flatMap(p -> p.stream())
-			.collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
-		
-		System.out.println(collect);
-		
-		// qual é o usuario que mais pagou
+		Stream<Product> products = payments.stream()
+			.flatMap(p -> p.getProducts().stream());
 
-		// que tipo de produto é o mais vendido (sum(VIDEO), sum(AUDIO))
+
+		Map<Product, Long> topProducts = payments.stream()
+			.flatMap(p -> p.getProducts().stream())
+			.collect(Collectors.groupingBy(Function.identity(), 
+						Collectors.counting()));
+		
+		System.out.println(topProducts);
+
+		topProducts.entrySet().stream()
+			.forEach(System.out::println);
+
+		topProducts.entrySet().stream()
+			.max(Comparator.comparing(Map.Entry::getValue))
+			.ifPresent(System.out::println);
+		
 
 		// quero map<Product, BigDecimal>
 		
-		payments.stream()
-			.map(Payment::getProducts)
-			.flatMap(p -> p.stream())
+		Map<Product, BigDecimal> totalValuePerProduct = payments.stream()
+			.flatMap(p -> p.getProducts().stream())
 			.collect(Collectors.groupingBy(Function.identity(), 
 					 Collectors.reducing(BigDecimal.ZERO, Product::getPrice, BigDecimal::add)));
 
-		
-		// quero map<MonthYear, Map<Product, BigDecimal>>
-
-		// quero map<Customer, List<Payment>>, list ordenado por horario da compra
-		
-		//Map<Customer, List<Payment>>
-		payments.stream()
-//			.sorted(Comparator.comparing(Payment::getDate)) // pela pela data
-			.sorted(Comparator.comparing(p -> p.getDate().toLocalTime())) // pela hora
-			.collect(Collectors.groupingBy(Payment::customer))
-			.entrySet()
+		totalValuePerProduct.entrySet().stream()
+			.sorted(Comparator.comparing(Map.Entry::getValue))
 			.forEach(System.out::println);
-		
-		// quero map<Customer, List<Product>>, flatMap
 
-		Map<Customer, List<List<Product>>> mapa = payments.stream() 
-		// como eu faço o flatmap dentro do Collectors.mapping ?
-		.collect(Collectors.groupingBy(Payment::customer, 
+
+		// usuário para lista de payment
+		Map<Customer, List<Payment>> customerToPayments = 
+			payments.stream()
+			.collect(Collectors.groupingBy(Payment::getCustomer));
+
+		Map<Customer, List<List<Product>>> customerToProductsList = payments.stream() 
+			.collect(Collectors.groupingBy(Payment::getCustomer, 
 				Collectors.mapping(Payment::getProducts, Collectors.toList())));
-		
-		
-		// quero map<Customer, Type>, qual é o tipo de produto que ele mais comprou
 
+		customerToProductsList.entrySet().stream()
+			.sorted(Comparator.comparing(e -> e.getKey().getName()))
+			.forEach(System.out::println);
+
+
+		System.out.println();
+
+		// transformando List<List>> em List quando value de map:
+		Map<Customer, List<Product>> customerToProducts2steps =
+			customerToProductsList.entrySet().stream()
+			.collect(Collectors.toMap(Map.Entry::getKey,
+						e -> e.getValue().stream()
+							.flatMap(List::stream)
+							.collect(Collectors.toList())));
+
+		customerToProducts2steps.entrySet().stream()
+			.sorted(Comparator.comparing(e -> e.getKey().getName()))
+			.forEach(System.out::println);
+
+		System.out.println();
+
+		Map<Customer, List<Product>> customerToProducts1step = payments.stream() 
+			.collect(Collectors.groupingBy(Payment::getCustomer, 
+				Collectors.mapping(Payment::getProducts, Collectors.toList())))
+				.entrySet().stream()
+					.collect(Collectors.toMap(Map.Entry::getKey,
+						e -> e.getValue().stream()
+							.flatMap(List::stream)
+							.collect(Collectors.toList())));
+
+		// usando reducao
+		Map<Customer, List<Product>> customerToProducts = payments.stream() 
+			.collect(Collectors.groupingBy(Payment::getCustomer, 
+				Collectors.reducing(Collections.emptyList(),
+					Payment::getProducts,
+						(l1, l2) -> { List<Product> l = new ArrayList<>();
+									l.addAll(l1);
+									l.addAll(l2);
+									return l;} )));
+
+		customerToProducts.entrySet().stream()
+			.sorted(Comparator.comparing(e -> e.getKey().getName()))
+			.forEach(System.out::println);
+
+
+		// qual é o usuario que mais pagou
+		
+		Map<Customer, BigDecimal> totalValuePerCustomer = payments.stream()
+			.collect(Collectors.groupingBy(Payment::getCustomer, 
+					 Collectors.reducing(BigDecimal.ZERO, 
+					 	p -> p.getProducts().stream().map(Product::getPrice).reduce(BigDecimal.ZERO, BigDecimal::add),
+					 		 BigDecimal::add)));
+		
+		totalValuePerCustomer.entrySet().stream()
+			.sorted(Comparator.comparing(Map.Entry::getValue))
+			.forEach(System.out::println);
+
+		Function<Payment, BigDecimal> paymentToTotal = 
+			p -> p.getProducts().stream()
+				.map(Product::getPrice)
+				.reduce(BigDecimal.ZERO, BigDecimal::add);
+
+		Map<Customer, BigDecimal> totalValuePerCustomer2 = payments.stream()
+			.collect(Collectors.groupingBy(Payment::getCustomer, 
+					 Collectors.reducing(BigDecimal.ZERO, 
+					 	paymentToTotal,
+					 		 BigDecimal::add)));
+
+		
 		// quero map<MonthYear, List<Payment>> agrupar por mes as vendas
 
 		// quero map<MonthYear, BigDecimal> total recebido por mes
-
-
+		
 
 
 
@@ -309,10 +376,17 @@ public class Capitulo11 {
 			.reduce(BigDecimal::add)
 			.orElse(BigDecimal.ZERO);
 		
+
+		// EXERCICIOS
+
 		// achar o usuario que mais pagou total de valor de subscriptions ate hoje	
 		
-		
 		// achar o usuario que ficou mais meses pagando (independente dela estar ativa ou nao)
+
+		// quero map<Customer, Type>, qual é o tipo de produto que ele mais comprou
+
+		// que tipo de produto é o mais vendido (sum(VIDEO), sum(AUDIO))
+
 
 	}
 }
