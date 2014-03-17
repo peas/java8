@@ -21,12 +21,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.function.Function;
 
-enum Type {
-	MUSIC, 
-	VIDEO, 
-	IMAGE;
-}
-
 class Product {
 	private String name;
 	private Path file;
@@ -419,6 +413,14 @@ public class Capitulo11 {
 
 		// que tipo de produto é o mais vendido (sum(VIDEO), sum(AUDIO))
 
-
+		// Dado um %%Payment%%, gere a lista de %%Paths%% dos arquivos digitais comprados.
 	}
+}
+
+// para exercicios
+
+enum Type {
+	MUSIC, 
+	VIDEO, 
+	IMAGE;
 }
