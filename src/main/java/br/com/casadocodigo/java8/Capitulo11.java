@@ -104,17 +104,24 @@ class Payment {
 }
 
 class Subscription {
-	
 	private BigDecimal monthlyFee;
 	private LocalDateTime begin;
 	private Optional<LocalDateTime> end;
 	private Customer customer;
 	
 	public Subscription(BigDecimal monthlyFee, LocalDateTime begin,
-			Optional<LocalDateTime> end, Customer customer) {
+			 Customer customer) {
 		this.monthlyFee = monthlyFee;
 		this.begin = begin;
-		this.end = end;
+		this.end = Optional.empty();
+		this.customer = customer;
+	}
+
+	public Subscription(BigDecimal monthlyFee, LocalDateTime begin,
+			LocalDateTime end, Customer customer) {
+		this.monthlyFee = monthlyFee;
+		this.begin = begin;
+		this.end = Optional.of(end);
 		this.customer = customer;
 	}
 
@@ -134,10 +141,11 @@ class Subscription {
 		return customer;
 	}
 	
-	public BigDecimal getTotalPaidMonths() {
-
-		return BigDecimal.valueOf(ChronoUnit.MONTHS.between(
-			getBegin(), getEnd().orElse(LocalDateTime.now())));
+	public BigDecimal getTotalPaid() {
+		return getMonthlyFee()
+					.multiply(new BigDecimal(ChronoUnit.MONTHS
+						.between(getBegin(), 
+							getEnd().orElse(LocalDateTime.now()))));
 	}
 }
 
@@ -349,33 +357,38 @@ public class Capitulo11 {
 
 		// subscriptions
 
-		BigDecimal monthlyFee = new BigDecimal("179.90");
+		BigDecimal monthlyFee = new BigDecimal("99.90");
 		
 		Subscription s1 = new Subscription(monthlyFee, 
-				today.minusMonths(5), Optional.empty(), paulo);
+				yesterday.minusMonths(5), paulo);
 		
 		Subscription s2 = new Subscription(monthlyFee, 
-				today.minusMonths(2), Optional.of(today.plusMonths(5)), rodrigo);
+				yesterday.minusMonths(8), today.minusMonths(1), rodrigo);
 		
 		Subscription s3 = new Subscription(monthlyFee, 
-				today.minusMonths(1), Optional.of(today.plusMonths(1)), adriano);
+				yesterday.minusMonths(5), today.minusMonths(2), adriano);
 		
 		List<Subscription> subscriptions = Arrays.asList(s1, s2, s3);
 		
-		
-		// dada uma unica subscription, calcular quanto ele pagou ate hoje
-			// algo como calculaMesesEntre(subscription.getBegin(), subscription.getEnd().orElse(today))
-			// e ai multiplica pelo mnthlyFee
+		// numero de meses pago
+		System.out.println(ChronoUnit.MONTHS.between(
+			s1.getBegin(), LocalDateTime.now()));
 
-		s1.getTotalPaidMonths().multiply(s1.getMonthlyFee());
+		System.out.println(ChronoUnit.MONTHS.between(
+			s1.getBegin(), s1.getEnd().orElse(LocalDateTime.now())));
+
+		// dada uma unica subscription, calcular quanto ele pagou ate hoje
+		System.out.println(s1.getMonthlyFee()
+					.multiply(new BigDecimal(ChronoUnit.MONTHS.between(
+			s1.getBegin(), s1.getEnd().orElse(LocalDateTime.now())))));
+
 
 		// dada uma colecao de subscription, calcular quanto todos pagaram ate hoje
 		
-		subscriptions.stream()
-			.map(s -> s.getMonthlyFee().multiply(s.getTotalPaidMonths()))
-			.reduce(BigDecimal::add)
-			.orElse(BigDecimal.ZERO);
-		
+		BigDecimal totalPaid = subscriptions.stream()
+			.map(Subscription::getTotalPaid)
+			.reduce(BigDecimal.ZERO, BigDecimal::add);
+		System.out.println(totalPaid);
 
 		// EXERCICIOS
 
