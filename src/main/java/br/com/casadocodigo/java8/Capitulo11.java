@@ -7,6 +7,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.time.format.DateTimeFormatter;
+import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -18,7 +20,6 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.function.Function;
-import java.time.format.DateTimeFormatter;
 
 enum Type {
 	MUSIC, 
@@ -348,9 +349,27 @@ public class Capitulo11 {
 					 		 BigDecimal::add)));
 
 		
-		// quero map<MonthYear, List<Payment>> agrupar por mes as vendas
 
-		// quero map<MonthYear, BigDecimal> total recebido por mes
+		// quero map<YearMonth, List<Payment>> agrupar por mes as vendas
+		Map<YearMonth, List<Payment>> paymentsPerMonth = payments.stream()
+			.collect(Collectors.groupingBy(p -> YearMonth.from(p.getDate())));
+
+		paymentsPerMonth.entrySet().stream()
+			.forEach(System.out::println);
+
+		// quero map<YearMonth, BigDecimal> total recebido por mes
+		Map<YearMonth, BigDecimal> paymentsValuePerMonth = payments.stream()
+			.collect(Collectors.groupingBy(p -> YearMonth.from(p.getDate()),
+				Collectors.reducing(BigDecimal.ZERO, 
+					p -> p.getProducts().stream()
+						.map(Product::getPrice)
+						.reduce(BigDecimal.ZERO,
+							BigDecimal::add),
+					BigDecimal::add)));
+
+
+		paymentsValuePerMonth.entrySet().stream()
+			.forEach(System.out::println);
 		
 
 
