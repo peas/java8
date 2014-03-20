@@ -15,7 +15,7 @@ class Capitulo7 {
 
 		List<Usuario> usuarios = Arrays.asList(u1, u2, u3);
 
-		usuarios.sort(Comparator.comparing(Usuario::getPontos));
+		usuarios.sort(Comparator.comparing(Usuario::getPontos).reversed());
 		usuarios.subList(0,1).forEach(Usuario::tornaModerador);
 
 		Collections.sort(usuarios, new Comparator<Usuario>() {
@@ -24,6 +24,8 @@ class Capitulo7 {
 				return u1.getPontos() - u2.getPontos();
 			}
 		});
+
+		Collections.reverse(usuarios);
 		List<Usuario> top10 = usuarios.subList(0, 1);
 		for(Usuario usuario : top10) {
 			usuario.tornaModerador();
