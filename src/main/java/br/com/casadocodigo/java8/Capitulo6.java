@@ -5,9 +5,7 @@ import static java.util.Comparator.comparing;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
-import java.util.function.BiFunction;
-import java.util.function.Consumer;
-import java.util.function.Function;
+import java.util.function.*;
 
 class Capitulo6 {
 
@@ -79,7 +77,9 @@ class Capitulo6 {
 
 		
 		Runnable consumer = rodrigo::tornaModerador;
-
+		BiFunction<Integer, Integer, Integer> max = Math::max;
+		ToIntBiFunction<Integer, Integer> max2 = Math::max;
+		IntBinaryOperator max3 = Math::max;
 
 	}
 }
