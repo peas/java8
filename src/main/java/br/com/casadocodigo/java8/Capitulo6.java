@@ -76,7 +76,15 @@ class Capitulo6 {
 		Usuario paulo2 = criadorDeUsuarios2.apply("Paulo Silveira", 300);
 
 		
-		Runnable consumer = rodrigo::tornaModerador;
+		Runnable bloco = rodrigo::tornaModerador;
+
+		Runnable bloco1 = rodrigo::tornaModerador;
+		Runnable bloco2 = () -> rodrigo.tornaModerador();
+
+
+		Consumer<Usuario> consumer1 = Usuario::tornaModerador;
+		Consumer<Usuario> consumer2 = (u) -> u.tornaModerador();
+
 		BiFunction<Integer, Integer, Integer> max = Math::max;
 		ToIntBiFunction<Integer, Integer> max2 = Math::max;
 		IntBinaryOperator max3 = Math::max;
