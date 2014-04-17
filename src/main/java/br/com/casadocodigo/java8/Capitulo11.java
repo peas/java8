@@ -242,8 +242,12 @@ public class Capitulo11 {
 			.flatMap(p -> p.getProducts().stream())
 			.collect(Collectors.groupingBy(Function.identity(), 
 						Collectors.counting()));
+
 		
 		System.out.println(topProducts);
+
+
+
 
 		topProducts.entrySet().stream()
 			.forEach(System.out::println);
@@ -264,6 +268,16 @@ public class Capitulo11 {
 			.sorted(Comparator.comparing(Map.Entry::getValue))
 			.forEach(System.out::println);
 
+
+		Map<Product, BigDecimal> totalValuePerProduct2 = payments.stream()
+			.flatMap(p -> p.getProducts().stream())
+			.collect(Collectors.toMap(Function.identity(), 
+						Product::getPrice,
+						BigDecimal::add));
+		
+		totalValuePerProduct2.entrySet().stream()
+			.sorted(Comparator.comparing(Map.Entry::getValue))
+			.forEach(System.out::println);
 
 		// usuário para lista de payment
 		Map<Customer, List<Payment>> customerToPayments = 
