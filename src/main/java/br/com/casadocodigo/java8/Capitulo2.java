@@ -8,7 +8,7 @@ public class Capitulo2 {
 	
 	public static void main(String... args) {
 		
-		Usuario u1 = new Usuario("Paulo Silveira", 150);
+		Usuario u1 = new Usuario("Paulo Jhony", 150);
 		Usuario u2 = new Usuario("Rodrigo Turini", 120);
 		Usuario u3 = new Usuario("Guilherme Silveira", 190);
 
